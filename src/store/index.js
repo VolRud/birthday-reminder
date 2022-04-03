@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, } from 'redux';
-import serviceMiddleware from './middlewares/serviceMiddleware';
 import reducer from './reducers'; 
 
-const enhancer = applyMiddleware(serviceMiddleware);
+const enhancer = applyMiddleware();
 export const store = createStore(reducer, {}, enhancer);
