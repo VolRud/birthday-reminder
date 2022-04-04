@@ -4,7 +4,7 @@ import Day from './Day';
 import uniqid from 'uniqid';
 
 export const Week = (props) => {
-	const { weekDays, } = props;
+	const { weekDays,} = props;
 	return(
 		<div className='week'>
 			{weekDays.map(item => {
@@ -21,6 +21,6 @@ export const Week = (props) => {
 };
 
 Week.propTypes = {
-	weekDays: PropTypes.any.isRequired,
-	setActiveDate: PropTypes.func.isRequired,
+	weekDays: PropTypes.any,
+	setActiveDate: PropTypes.func,
 };

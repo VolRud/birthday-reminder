@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { calendarAC } from '../store/AC';
+import { calendarAC } from '../../store/AC';
 
 const CalendarNavigation = (props) => {
 	return(

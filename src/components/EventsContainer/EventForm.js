@@ -1,7 +1,7 @@
 import React, { useState, } from 'react';
 import PropTypes from 'prop-types';
 import { format, setHours, setMinutes } from 'date-fns';
-import { stringIsEmpty } from '../utils/helpers';
+import { stringIsEmpty } from '../../utils/helpers';
 
 export const EventForm = (props) => {
 	const {
@@ -10,21 +10,24 @@ export const EventForm = (props) => {
 		isEditForm,
 		eventDataProp,
 	} = props;
-	eventDataProp && console.log('_hh__', );
+	const emptyEventForm ={
+		title: '',
+		description: '',
+		time: '00:00',
+	};
 	const [eventData, setEventData] = useState(isEditForm
 		? {
 			title: eventDataProp.title,
 			description: eventDataProp.description,
 			time: format(new Date(eventDataProp.date), 'HH:mm'),
 		}
-		: {
-			title: '',
-			description: '',
-			time: '00:00',
-		});
+		: { ...emptyEventForm, });
 	const { title, description, time, } = eventData;
 	const onInputChange = (e) => {
 		const { target: { value, name, }} = e;
+		if(name === 'title' && value.length>30){
+			return;
+		}
 		setEventData({
 			...eventData,
 			[name]: value,
@@ -32,8 +35,7 @@ export const EventForm = (props) => {
 	};
 	const saveEvent = () => {
 		if([title, description, time].some(str => stringIsEmpty(str))){
-			alert('Some field is empty');
-			return;
+			return alert('Some field is empty');
 		}
 		const [h, min] = time.split(':');
 		let eventDate = setHours(chosenDate, h);
@@ -47,11 +49,7 @@ export const EventForm = (props) => {
 				date: eventDate,
 			}});
 		props.openEventForm();
-		setEventData({
-			title: '',
-			description: '',
-			time: '',
-		});
+		setEventData({ ...emptyEventForm, });
 	};
 
 	return (
@@ -81,11 +79,10 @@ export const EventForm = (props) => {
 };
 
 EventForm.propTypes = {
-	chosenDate: PropTypes.object.isRequired,
-	setActiveDate: PropTypes.func.isRequired,
-	isCreateForm: PropTypes.bool.isRequired,
-	isEditForm: PropTypes.bool.isRequired,
-	eventDataProp: PropTypes.object.isRequired,
-	openEventForm: PropTypes.func.isRequired,
-	mutation: PropTypes.object.isRequired,
+	chosenDate: PropTypes.object,
+	isCreateForm: PropTypes.bool,
+	isEditForm: PropTypes.bool,
+	eventDataProp: PropTypes.object,
+	openEventForm: PropTypes.func,
+	mutation: PropTypes.object,
 };

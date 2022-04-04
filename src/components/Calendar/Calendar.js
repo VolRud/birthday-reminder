@@ -1,30 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getCalendarMonth, getMonthName } from '../utils/helpers';
+import { groupMonthDaysByWeeks, } from '../../utils/helpers';
 import { Month } from './Month';
 import { connect } from 'react-redux';
 import CalendarNavigation from './CalendarNavigation';
-import { calendarAC } from '../store/AC';
+import { calendarAC } from '../../store/AC';
+import { daysOfWeek, monthesNames, } from '../../utils/constants';
 
 const Calendar = (props) => {
-	const { displayedMonth:{ month, year} } = props;
-
+	const { displayedMonth: { month, year, } } = props;
 	return(
 		<div className="calendar">
 			<CalendarNavigation />
-			{getMonthName(month)}, {year}
+			{monthesNames[month]}, {year}
 			<div className='week-title'>
-				<span>Monday</span>
-				<span>Tuesday</span>
-				<span>Wednesday</span>
-				<span>Thursday</span>
-				<span>Friday</span>
-				<span>Saturday</span>
-				<span>Sunday</span>
+				{daysOfWeek.map((item, i) => {
+					return(<span key={i}>{item}</span>);
+				})}
 			</div>
 			<Month
 				setActiveDate={props.setActiveDate}
-				month={getCalendarMonth(year, month)}
+				month={groupMonthDaysByWeeks(year, month)}
 			/>
 		</div>
 	);

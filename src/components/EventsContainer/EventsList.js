@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { EventForm } from './EventForm';
 import { Event } from './Event';
 import { useState } from 'react';
-import { mainRequest } from '../services/mainRequest';
-import { calendarAC } from '../store/AC';
+import { mainRequest } from '../../services/mainRequest';
+import { calendarAC } from '../../store/AC';
 import { isSameDay } from 'date-fns';
 import { useMutation, useQueryClient, useQuery, } from 'react-query';
-import { sortByDate } from '../utils/helpers';
+import { sortByDate } from '../../utils/helpers';
 import { ToPrevNextDay } from './ToPrevNextDay';
-import { Loader } from '../components/ui/Loader';
+import { Loader } from '../ui/Loader';
 
 const EventsList = (props) => {
 	const [eventFormIsOpen, setEventFormOpen] = useState(false);
@@ -24,10 +24,13 @@ const EventsList = (props) => {
 	}, {
 		onSuccess: () => {
 			queryClient.invalidateQueries('eventList');
+			props.getMarkedDays(data);
 		}
 	});
 	const { chosenDate, } = props;
-	const dayEvents = isSuccess && sortByDate(data.filter(item=>isSameDay(new Date(item.date), chosenDate)));
+	const dayEvents = isSuccess && sortByDate(data.filter(item=>{
+		return isSameDay(new Date(item.date), chosenDate);
+	}));
 	const openEventForm = () => {
 		setEventFormOpen(!eventFormIsOpen);
 	};
@@ -40,6 +43,7 @@ const EventsList = (props) => {
 					chosenDate={chosenDate}
 					setActiveDate={props.setActiveDate}
 				/>
+				{isSuccess && dayEvents.length === 0 && (<p>No events on this day</p>)}
 				{isSuccess && dayEvents.map((item) => {
 					return(
 						<Event
@@ -83,6 +87,7 @@ const mapDispatchToProps = dispatch => (
 export default connect(mapStateToProps, mapDispatchToProps)(EventsList);
 
 EventsList.propTypes = {
-	chosenDate: PropTypes.object.isRequired,
-	setActiveDate: PropTypes.func.isRequired,
+	chosenDate: PropTypes.object,
+	setActiveDate: PropTypes.func,
+	getMarkedDays: PropTypes.func,
 };

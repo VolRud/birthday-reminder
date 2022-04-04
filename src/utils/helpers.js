@@ -3,30 +3,6 @@ import {
 	isMonday,
 } from 'date-fns';
 
-
-export const getDateObject = date => new Date(date);
-
-export const getMonth = (date) => {
-	return getDateObject(date).getMonth();
-};
-
-const monthesNames = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December',
-];
-
-export const getMonthName = month => monthesNames[month];
-
 export const getFirsttdayOfMonth = (year, month) => {
 	return  new Date(year, month, 1);
 };
@@ -35,13 +11,13 @@ export const getLastdayOfMonth = (year, month) => {
 	return  new Date(year, month +1, 0);
 };
 
-export const getCalendarMonth = (year, month) => {
+export const groupMonthDaysByWeeks = (year, month) => {
 	const eachDayOfMonth = getEachDayOfMonth(year, month);
 	let calendarMonth = [];
 	let emptyWeek = [];
 	eachDayOfMonth.forEach((item, i) => {
 		emptyWeek.push(item);
-		if(isMonday(eachDayOfMonth[i+1]) || i+1 === eachDayOfMonth.length){
+		if(isMonday(eachDayOfMonth[++i]) || ++i === eachDayOfMonth.length){
 			calendarMonth.push(emptyWeek);
 			emptyWeek = [];
 		}
