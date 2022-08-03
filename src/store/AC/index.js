@@ -1,5 +1,5 @@
-import * as calendarAC from './calendar';
+export * as calendarAC from './calendar';
 
-export {
-	calendarAC,
-};
+// export {
+// 	calendarAC,
+// };

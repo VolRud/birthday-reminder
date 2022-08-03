@@ -40,14 +40,16 @@ export const EventForm = (props) => {
 		const [h, min] = time.split(':');
 		let eventDate = setHours(chosenDate, h);
 		eventDate = setMinutes(eventDate, min);
-		props.mutation.mutate({
-			method: isCreateForm ? 'POST' : 'PATCH',
-			data: {
-				title,
-				description,
-				id: isCreateForm ? null : eventDataProp.id,
-				date: eventDate,
-			}});
+		const eventData = {
+			title,
+			description,
+			id: isCreateForm ? null : eventDataProp.id,
+			date: eventDate,
+		};
+		isCreateForm
+			? props.createNewEvent(eventData)
+			: props.editEventById(eventData);
+
 		props.openEventForm();
 		setEventData({ ...emptyEventForm, });
 	};

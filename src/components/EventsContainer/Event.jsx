@@ -8,10 +8,7 @@ export const Event = (props) => {
 	const [editFormIsOpen, setOpmEditForm] = useState(false);
 	const { chosenDate, eventData, eventData: { title, description, id, }, } = props;
 	const deleteEvent = () => {
-		props.mutation.mutate({
-			method: 'DELETE',
-			data: {id},
-		});
+		props.deleteEventById({id});
 	};
 	const openEventForm = () => {
 		setOpmEditForm(!editFormIsOpen);
@@ -24,8 +21,8 @@ export const Event = (props) => {
 		? (
 			<EventForm
 				openEventForm={openEventForm}
+				editEventById={props.editEventById}
 				chosenDate={chosenDate}
-				mutation={props.mutation}
 				eventDataProp={eventData}
 				isEditForm={true}
 			/>
@@ -52,5 +49,4 @@ Event.propTypes = {
 	chosenDate: PropTypes.object,
 	eventDataProp: PropTypes.object,
 	eventData: PropTypes.object,
-	mutation: PropTypes.object,
 };

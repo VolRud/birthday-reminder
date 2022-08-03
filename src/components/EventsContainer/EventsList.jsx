@@ -1,54 +1,44 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { EventForm } from './EventForm';
 import { Event } from './Event';
 import { useState } from 'react';
-import { mainRequest } from '../../services/mainRequest';
 import { calendarAC } from '../../store/AC';
 import { isSameDay } from 'date-fns';
-import { useMutation, useQueryClient, useQuery, } from 'react-query';
 import { sortByDate } from '../../utils/helpers';
 import { ToPrevNextDay } from './ToPrevNextDay';
 import { Loader } from '../ui/Loader';
+import { eventsThunks } from '../../store/thunks';
 
 const EventsList = (props) => {
 	const [eventFormIsOpen, setEventFormOpen] = useState(false);
-	const queryClient = useQueryClient();
-	const { isLoading, data, isSuccess } = useQuery('eventList', () =>
-		mainRequest('get')
-	);
-	const mutation = useMutation(requestData => {
-		const { method, data, } = requestData;
-		return mainRequest(method, data);
-	}, {
-		onSuccess: () => {
-			queryClient.invalidateQueries('eventList');
-			props.getMarkedDays(data);
-		}
-	});
-	const { chosenDate, } = props;
-	const dayEvents = isSuccess && sortByDate(data.filter(item=>{
+
+	useEffect(()=>{
+		props.getEventsFromServer();
+	}, []);
+	const { events, eventsIsLoaded, chosenDate, } = props;
+
+	const dayEvents = eventsIsLoaded && sortByDate(events.filter(item=>{
 		return isSameDay(new Date(item.date), chosenDate);
 	}));
 	const openEventForm = () => {
 		setEventFormOpen(!eventFormIsOpen);
 	};
-
-	return isLoading
-		? (<Loader />)
-		: (
+	return eventsIsLoaded
+		? (
 			<div className="eventsList">
 				<ToPrevNextDay
 					chosenDate={chosenDate}
 					setActiveDate={props.setActiveDate}
 				/>
-				{isSuccess && dayEvents.length === 0 && (<p>No events on this day</p>)}
-				{isSuccess && dayEvents.map((item) => {
+				{eventsIsLoaded && dayEvents.length === 0 && (<p>No events on this day</p>)}
+				{eventsIsLoaded && dayEvents.map((item) => {
 					return(
 						<Event
 							chosenDate={chosenDate}
-							mutation={mutation}
+							deleteEventById={props.deleteEventById}
+							editEventById={props.editEventById}
 							eventData={item}
 							key={item.id} 
 						/>
@@ -57,9 +47,9 @@ const EventsList = (props) => {
 				{eventFormIsOpen
 					? (
 						<EventForm
+							createNewEvent={props.createNewEvent}
 							openEventForm={openEventForm}
 							isCreateForm={true}
-							mutation={mutation}
 							chosenDate={chosenDate}
 						/>
 					)
@@ -68,19 +58,27 @@ const EventsList = (props) => {
 					>Add new event</button>)
 				}
 			</div>
-		);
+		)
+		: (<Loader />);
 };
 
 const mapStateToProps = (state) => {
 	const { chosenDate, } = state.calendar;
+	const { events, eventsIsLoaded, } = state.events;
 	return {
 		chosenDate,
+		events,
+		eventsIsLoaded,
 	};
 };
 
 const mapDispatchToProps = dispatch => (
 	{
+		getEventsFromServer: () =>  dispatch(eventsThunks.getEventsFromServer()),
+		deleteEventById: (eventId) =>  dispatch(eventsThunks.deleteEventById(eventId)),
+		editEventById: (eventData) =>  dispatch(eventsThunks.editEventById(eventData)),
 		setActiveDate: (date) => dispatch(calendarAC.setActiveDate(date)),
+		createNewEvent: (eventData) => dispatch(eventsThunks.createNewEvent(eventData)),
 	}
 );
   
