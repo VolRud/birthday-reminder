@@ -85,7 +85,13 @@ const mapDispatchToProps = dispatch => (
 export default connect(mapStateToProps, mapDispatchToProps)(EventsList);
 
 EventsList.propTypes = {
+	editEventById: PropTypes.func,
+	deleteEventById: PropTypes.func,
+	getEventsFromServer: PropTypes.func,
+	events: PropTypes.array,
+	eventsIsLoaded: PropTypes.array,
 	chosenDate: PropTypes.object,
 	setActiveDate: PropTypes.func,
 	getMarkedDays: PropTypes.func,
+	createNewEvent: PropTypes.func,
 };

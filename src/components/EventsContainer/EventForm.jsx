@@ -87,4 +87,6 @@ EventForm.propTypes = {
 	eventDataProp: PropTypes.object,
 	openEventForm: PropTypes.func,
 	mutation: PropTypes.object,
+	createNewEvent: PropTypes.func,
+	editEventById: PropTypes.func,
 };

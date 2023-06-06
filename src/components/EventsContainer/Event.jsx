@@ -49,4 +49,6 @@ Event.propTypes = {
 	chosenDate: PropTypes.object,
 	eventDataProp: PropTypes.object,
 	eventData: PropTypes.object,
+	deleteEventById: PropTypes.func,
+	editEventById: PropTypes.func,
 };
