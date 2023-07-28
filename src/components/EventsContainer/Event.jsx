@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import { format, } from 'date-fns';
 import { useState } from 'react';
 import { EventForm } from './EventForm';
+import { useDispatch } from 'react-redux';
+import { deleteEvent } from '../../redux/slices/events.slice';
 
 export const Event = (props) => {
 	const [editFormIsOpen, setOpmEditForm] = useState(false);
+	const dispatch = useDispatch();
 	const { chosenDate, eventData, eventData: { title, description, id, }, } = props;
-	const deleteEvent = () => {
-		props.deleteEventById({id});
+	const deleteEventById = () => {
+		dispatch(deleteEvent({id}));
 	};
 	const openEventForm = () => {
 		setOpmEditForm(!editFormIsOpen);
@@ -36,7 +39,7 @@ export const Event = (props) => {
 							onClick={openEventForm}
 						>Edit</button>
 						<button
-							onClick={deleteEvent}
+							onClick={deleteEventById}
 						>Delete</button>
 					</div>
 				</span>
@@ -49,6 +52,5 @@ Event.propTypes = {
 	chosenDate: PropTypes.object,
 	eventDataProp: PropTypes.object,
 	eventData: PropTypes.object,
-	deleteEventById: PropTypes.func,
 	editEventById: PropTypes.func,
 };

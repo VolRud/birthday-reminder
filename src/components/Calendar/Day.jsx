@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getDate } from 'date-fns';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { isSameDay } from 'date-fns';
+import { selectCalendar, setActiveDate } from '../../redux/slices/calendar.slice';
 
-const Day = (props) => {
-	const { date, chosenDate, } = props;
+export const Day = (props) => {
+	const dispatch = useDispatch();
+	const { date, } = props;
+	const calendar = useSelector(selectCalendar);
+	const { chosenDate } = calendar;
 	const isChoosenDay = isSameDay(date, chosenDate);
+
 	return(
 		<div
-			onClick={()=>props.setActiveDate(date)}
+			onClick={()=>(dispatch(setActiveDate(date)))}
 			className={isChoosenDay ? 'choosen-day' : 'day'}
 		>
 			{getDate(date)}
@@ -17,17 +22,6 @@ const Day = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
-	const { chosenDate, } = state.calendar;
-	return {
-		chosenDate,
-	};
-};
-
-export default connect(mapStateToProps, null)(Day);
-
 Day.propTypes = {
 	date: PropTypes.object.isRequired,
-	chosenDate: PropTypes.object.isRequired,
-	setActiveDate: PropTypes.func.isRequired,
 };

@@ -10,7 +10,6 @@ export const Month = (props) => {
 			{month.map(item => {
 				return(
 					<Week
-						setActiveDate={props.setActiveDate}
 						weekDays={item}
 						key={uniqid()}
 					/>
@@ -22,5 +21,4 @@ export const Month = (props) => {
 
 Month.propTypes = {
 	month: PropTypes.array.isRequired,
-	setActiveDate: PropTypes.func.isRequired,
 };

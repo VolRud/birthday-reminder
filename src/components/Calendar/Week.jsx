@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Day from './Day';
+import {Day} from './Day';
 import uniqid from 'uniqid';
 
 export const Week = (props) => {
@@ -10,7 +10,6 @@ export const Week = (props) => {
 			{weekDays.map(item => {
 				return (
 					<Day
-						setActiveDate={props.setActiveDate}
 						date={item}
 						key={uniqid()}
 					/>
@@ -22,5 +21,4 @@ export const Week = (props) => {
 
 Week.propTypes = {
 	weekDays: PropTypes.any,
-	setActiveDate: PropTypes.func,
 };

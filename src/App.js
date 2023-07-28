@@ -1,15 +1,15 @@
 import React from 'react';
 import './App.scss';
-import { store } from './store';
-import { Provider } from 'react-redux';
-import { RootComponent } from './components/RootComponent';
+import { Calendar } from './components/Calendar/Calendar';
+import { EventsList } from './components/EventsContainer/EventsList';
 
 function App() {
-	return (
-		<Provider store={store}>
-			<RootComponent />
-		</Provider>
-	);
+  return (
+    <>
+      <Calendar />
+      <EventsList />
+    </>
+  );
 }
 
 export default App;

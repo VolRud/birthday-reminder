@@ -1,1 +1,0 @@
-export * as eventsThunks from './events.thunks';

@@ -2,10 +2,15 @@ import React, { useState, } from 'react';
 import PropTypes from 'prop-types';
 import { format, setHours, setMinutes } from 'date-fns';
 import { stringIsEmpty } from '../../utils/helpers';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCalendar } from '../../redux/slices/calendar.slice';
+import { addNewEvent, editEvent } from '../../redux/slices/events.slice';
 
 export const EventForm = (props) => {
-	const {
-		chosenDate,
+	const calendar = useSelector(selectCalendar);
+	const dispatch = useDispatch();
+	const { chosenDate } = calendar;
+	const { 
 		isCreateForm,
 		isEditForm,
 		eventDataProp,
@@ -47,8 +52,8 @@ export const EventForm = (props) => {
 			date: eventDate,
 		};
 		isCreateForm
-			? props.createNewEvent(eventData)
-			: props.editEventById(eventData);
+			? dispatch(addNewEvent(eventData))
+			: dispatch(editEvent(eventData));
 
 		props.openEventForm();
 		setEventData({ ...emptyEventForm, });

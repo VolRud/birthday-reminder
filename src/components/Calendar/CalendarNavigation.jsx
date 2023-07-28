@@ -1,33 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { calendarAC } from '../../store/AC';
+import { switchToNextMoth, switchToPrewiewMoth } from '../../redux/slices/calendar.slice';
+import { useDispatch } from 'react-redux';
 
-const CalendarNavigation = (props) => {
+export const CalendarNavigation = () => {
+	const dispatch = useDispatch();
+
 	return(
 		<div className='calendar-nav'>
-			<div onClick={props.toPreviousMonth}>
+			<div onClick={()=>(dispatch(switchToPrewiewMoth()))}>
                 To previous
 			</div>
 
-			<div onClick={props.toNextMonth}>
+			<div onClick={()=>(dispatch(switchToNextMoth()))}>
                 To next
 			</div>
 		</div>
 	);
 };
-
-const mapDispatchToProps = dispatch => (
-	{
-		toNextMonth: () => dispatch(calendarAC.switchToNextsMonth()),
-		toPreviousMonth: () => dispatch(calendarAC.switchToPreviousMonth()),
-	}
-);
   
-
-export default connect(null, mapDispatchToProps)(CalendarNavigation);
-
-CalendarNavigation.propTypes = {
-	toNextMonth: PropTypes.func.isRequired,
-	toPreviousMonth: PropTypes.func.isRequired,
-};
