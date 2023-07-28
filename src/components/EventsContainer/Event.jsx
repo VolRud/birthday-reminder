@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { format, } from 'date-fns';
 import { useState } from 'react';
 import { EventForm } from './EventForm';
 import { useDispatch } from 'react-redux';
@@ -17,9 +16,6 @@ export const Event = (props) => {
 		setOpmEditForm(!editFormIsOpen);
 	};
 
-	const getTime = () => {
-		return format(new Date(eventData.date), 'HH:mm');
-	};
 	return editFormIsOpen
 		? (
 			<EventForm
@@ -32,7 +28,6 @@ export const Event = (props) => {
 		):(
 			<div className="event-body">
 				<span className="event-title">
-					<span>{getTime()}</span>
 					<span>{title}</span>
 					<div>
 						<button

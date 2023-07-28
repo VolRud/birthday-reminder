@@ -36,7 +36,7 @@ export const EventsList = () => {
 					chosenDate={chosenDate}
 					setActiveDate={()=>(dispatch(setActiveDate))}
 				/>
-				{eventsIsLoaded && dayEvents.length === 0 && (<p>No events on this day</p>)}
+				{eventsIsLoaded && dayEvents.length === 0 && (<p>There are no birthdays on this day</p>)}
 				{eventsIsLoaded && dayEvents.map((item) => {
 					return(
 						<Event
